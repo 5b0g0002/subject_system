@@ -8,8 +8,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: Dev127336
       MYSQL_DATABASE: subject_system
-      MYSQL_USER: root
-      MYSQL_PASSWORD: Dev127336
     ports:
       - "3310:3306"
     volumes:
