@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ title }}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/selection.css') }}"
+    />
+  </head>
+  <body class="page-body">
+    <h1 class="page-title">{{ title }}</h1>
+    <table class="course-table">
+      <thead>
+        <tr>
+          <th class="table-header">科目類別</th>
+          <th class="table-header">科目</th>
+          <th class="table-header">學分</th>
+          <th class="table-header">時數</th>
+          <th class="table-header">課程代碼</th>
+          <th class="table-header">額外資訊</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for course in courses %}
+        <tr class="table-row">
+          <td class="table-cell">{{ course[0] }}</td>
+          <td class="table-cell">{{ course[1] }}</td>
+          <td class="table-cell">{{ course[2] }}</td>
+          <td class="table-cell">{{ course[3] }}</td>
+          <td class="table-cell">{{ course[4] }}</td>
+          <td class="table-cell">{{ course[5] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <footer class="footer">
+      <a href="{{ url_for('index') }}" class="back-button">回到首頁</a>
+    </footer>
+  </body>
+</html>

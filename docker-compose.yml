@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Dev127336
+      MYSQL_DATABASE: subject_system
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Dev127336
+    ports:
+      - "3310:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h localhost -u root -p${MYSQL_ROOT_PASSWORD}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  flask:
+    build: .
+    container_name: flask
+    restart: always
+    environment:
+      FLASK_ENV: development
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
