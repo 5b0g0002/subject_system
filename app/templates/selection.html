@@ -1,41 +1,398 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <title>{{ title }}</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/selection.css') }}"
-    />
-  </head>
-  <body class="page-body">
-    <h1 class="page-title">{{ title }}</h1>
-    <table class="course-table">
-      <thead>
-        <tr>
-          <th class="table-header">科目類別</th>
-          <th class="table-header">科目</th>
-          <th class="table-header">學分</th>
-          <th class="table-header">時數</th>
-          <th class="table-header">課程代碼</th>
-          <th class="table-header">額外資訊</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for course in courses %}
-        <tr class="table-row">
-          <td class="table-cell">{{ course[0] }}</td>
-          <td class="table-cell">{{ course[1] }}</td>
-          <td class="table-cell">{{ course[2] }}</td>
-          <td class="table-cell">{{ course[3] }}</td>
-          <td class="table-cell">{{ course[4] }}</td>
-          <td class="table-cell">{{ course[5] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/selection.css') }}" />
+</head>
+<body class="page-body">
+    <div class="navbar">
+        <a href="#">選課頁面</a>
+        <p id="greeting" style="float: right; color: white; padding: 14px 16px;"></p>
+    </div>
+    <div class="sidebar">
+        <a href="javascript:void(0)" class="dropdown-btn">課程清單<i class="fa fa-caret-down"></i></a>
+        <div class="dropdown-container">
+            <a href="javascript:void(0)" class="dropdown-btn">一年級<i class="fa fa-caret-down"></i></a>
+            <div class="dropdown-container">
+                <a href="#" id="first-year-first-semester" class="draggable" draggable="true" ondragstart="drag(event)">一年級上學期</a>
+                <a href="#" id="first-year-second-semester" class="draggable" draggable="true" ondragstart="drag(event)">一年級下學期</a>
+            </div>
+            <a href="javascript:void(0)" class="dropdown-btn">二年級<i class="fa fa-caret-down"></i></a>
+            <div class="dropdown-container">
+                <a href="#" id="second-year-first-semester" class="draggable" draggable="true" ondragstart="drag(event)">二年級上學期</a>
+                <a href="#" id="second-year-second-semester" class="draggable" draggable="true" ondragstart="drag(event)">二年級下學期</a>
+            </div>
+            <a href="javascript:void(0)" class="dropdown-btn">三年級<i class="fa fa-caret-down"></i></a>
+            <div class="dropdown-container">
+                <a href="#" id="third-year-first-semester" class="draggable" draggable="true" ondragstart="drag(event)">三年級上學期</a>
+                <a href="#" id="third-year-second-semester" class="draggable" draggable="true" ondragstart="drag(event)">三年級下學期</a>
+            </div>
+            <a href="javascript:void(0)" class="dropdown-btn">四年級<i class="fa fa-caret-down"></i></a>
+            <div class="dropdown-container">
+                <a href="#" id="fourth-year-first-semester" class="draggable" draggable="true" ondragstart="drag(event)">四年級上學期</a>
+                <a href="#" id="fourth-year-second-semester" class="draggable" draggable="true" ondragstart="drag(event)">四年級下學期</a>
+            </div>
+            <a href="javascript:void(0)" class="dropdown-btn">五年級<i class="fa fa-caret-down"></i></a>
+            <div class="dropdown-container">
+                <a href="#" id="fifth-year-first-semester" class="draggable" draggable="true" ondragstart="drag(event)">五年級上學期</a>
+                <a href="#" id="fifth-year-second-semester" class="draggable" draggable="true" ondragstart="drag(event)">五年級下學期</a>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <h1 class="page-title">{{ title }}</h1>
+        <p>請從左側選單選擇您想選的課程，並將其拖動到右側的課表中。</p>
+        <div id="course-list"></div> <!-- 新增這一行 -->
+    </div>
+    <div class="timetable">
+        <h2>課表</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>時間</th>
+                    <th>週一</th>
+                    <th>週二</th>
+                    <th>週三</th>
+                    <th>週四</th>
+                    <th>週五</th>
+                </tr>
+            </thead>
+            <tbody id="timetable-body">
+                <tr>
+                    <td>第一節 08:10 - 09:00</td>
+                    <td id="mon1" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="tue1" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="wed1" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="thu1" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="fri1" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                </tr>
+                <tr>
+                    <td>第二節 09:10 - 10:00</td>
+                    <td id="mon2" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="tue2" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="wed2" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="thu2" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="fri2" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                </tr>
+                <tr>
+                    <td>第三節 10:10 - 11:00</td>
+                    <td id="mon3" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="tue3" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="wed3" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="thu3" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="fri3" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                </tr>
+                <tr>
+                    <td>第四節 11:10 - 12:00</td>
+                    <td id="mon4" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="tue4" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="wed4" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="thu4" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="fri4" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                </tr>
+                <tr>
+                    <td>第五節 12:50 - 13:40</td>
+                    <td id="mon5" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="tue5" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="wed5" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="thu5" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="fri5" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                </tr>
+                <tr>
+                    <td>第六節 13:50 - 14:40</td>
+                    <td id="mon6" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="tue6" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="wed6" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="thu6" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="fri6" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                </tr>
+                <tr>
+                    <td>第七節 14:50 - 15:40</td>
+                    <td id="mon7" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="tue7" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="wed7" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="thu7" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="fri7" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                </tr>
+                <tr>
+                    <td>第八節 15:50 - 16:40</td>
+                    <td id="mon8" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="tue8" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="wed8" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="thu8" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="fri8" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                </tr>
+                <tr>
+                    <td>第九節 16:50 - 17:40</td>
+                    <td id="mon9" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="tue9" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="wed9" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="thu9" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                    <td id="fri9" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <footer class="footer">
-      <a href="{{ url_for('index') }}" class="back-button">回到首頁</a>
+        <a href="{{ url_for('index') }}" class="back-button">回到首頁</a>
     </footer>
-  </body>
+    <script>
+        var dropdown = document.getElementsByClassName("dropdown-btn");
+        var i;
+        for (i = 0; i < dropdown.length; i++) {
+            dropdown[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var dropdownContent = this.nextElementSibling;
+                if (dropdownContent.style.display === "block") {
+                    dropdownContent.style.display = "none";
+                } else {
+                    dropdownContent.style.display = "block";
+                }
+            });
+        }
+        
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+        
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            var draggedElement = document.getElementById(data);
+            var clone = draggedElement.cloneNode(true);
+            clone.id = clone.id + "-clone-" + new Date().getTime();
+            ev.target.innerHTML = '';
+            ev.target.appendChild(clone);
+            clone.draggable = true;
+            clone.ondragstart = drag;
+        }
+
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const username = localStorage.getItem('username');
+            if (username) {
+                document.getElementById('greeting').innerText = `同學: ${username}您好`;
+            }
+
+            function showCourses(courses) {
+                let courseList = '<ul>';
+                courses.forEach(course => {
+                    const courseId = "course-" + course.replace(/[^a-zA-Z0-9]/g, "-") + "-" + new Date().getTime();
+                    courseList += `<li id="${courseId}" class="draggable" draggable="true" ondragstart="drag(event)" ondragend="removeCourse(event)">${course}</li>`;
+                });
+                courseList += '</ul>';
+                document.getElementById('course-list').innerHTML = courseList;
+            }
+
+
+
+            document.getElementById('first-year-first-semester').addEventListener("click", function() {
+                const courses = [
+                    '通識必修 - 基礎中文(一) - 2學分',
+                    '通識必修 - 專一英文(一) - 2學分',
+                    '通識必修 - 基礎數學(一) - 2學分',
+                    '通識必修 - 歷史．地理與文化(一) - 2學分',
+                    '通識必修 - 基礎物理(一) - 2學分',
+                    '通識必修 - 基礎化學 - 2學分',
+                    '通識必修 - 體育(一) - 1學分',
+                    '通識必修 - 社團活動(一) - 0學分',
+                    '通識必修 - 勞作教育(一) - 0學分',
+                    '通識必修 - 計算機概論 - 2學分',
+                    '通識必修 - 全民國防教育(一) - 1學分',
+                    '專業必修 - 套裝軟體應用 - 2學分',
+                    '專業必修 - 套裝軟體應用實習 - 2學分',
+                    '專業選修 - 圖像化程式設計 - 2學分',
+                    '專業選修 - 圖像化程式設計實習 - 2學分',
+                    '專業選修 - 基礎數學演練(一) - 1學分'
+                ];
+                showCourses(courses);
+            });
+
+            document.getElementById('first-year-second-semester').addEventListener("click", function() {
+                const courses = [
+                    '通識必修 - 基礎中文(二) - 2學分',
+                    '通識必修 - 專一英文(二) - 2學分',
+                    '通識必修 - 基礎數學(二) - 2學分',
+                    '通識必修 - 歷史．地理與文化(二) - 2學分',
+                    '通識必修 - 基礎物理(二) - 2學分',
+                    '通識必修 - 音樂賞析 - 2學分',
+                    '通識必修 - 體育(二) - 1學分',
+                    '通識必修 - 社團活動(二) - 0學分',
+                    '通識必修 - 勞作教育(二) - 0學分',
+                    '通識必修 - 全民國防教育(二) - 1學分',
+                    '專業必修 - 基礎網頁設計 - 2學分',
+                    '專業必修 - 網頁設計實習 - 2學分',
+                    '專業必修 - 數位邏輯概論 - 2學分',
+                    '專業必修 - 基礎程式設計(一) - 3學分',
+                    '專業選修 - 電腦軟體應用檢定 - 2學分',
+                    '專業選修 - 基礎數學演練(二) - 1學分'
+                ];
+                showCourses(courses);
+            });
+
+            document.getElementById('second-year-first-semester').addEventListener("click", function() {
+                const courses = [
+                    '通識必修 - 進階中文(一) - 2學分',
+                    '通識必修 - 專二英文(一) - 2學分',
+                    '通識必修 - 基礎數學(三) - 2學分',
+                    '通識必修 - 體育(三) - 1學分',
+                    '通識必修 - 社團活動(三) - 0學分',
+                    '通識必修 - 勞作教育(三) - 0學分',
+                    '通識必修 - 公民與社會 - 2學分',
+                    '通識必修 - 法律與你 - 2學分',
+                    '專業必修 - 基本電學(一) - 3學分',
+                    '專業必修 - 基本電學實習(一) - 1學分',
+                    '專業必修 - 基礎程式設計(二) - 3學分',
+                    '專業必修 - Linux系統概論 - 3學分',
+                    '專業選修 - 多媒體軟體應用 - 2學分',
+                    '專業選修 - 網頁設計檢定 - 2學分',
+                    '專業選修 - 基礎數學演練(三) - 1學分'
+                ];
+                showCourses(courses);
+            });
+
+            document.getElementById('second-year-second-semester').addEventListener("click", function() {
+                const courses = [
+                    '通識必修 - 進階中文(二) - 2學分',
+                    '通識必修 - 專二英文(二) - 2學分',
+                    '通識必修 - 基礎數學(四) - 2學分',
+                    '通識必修 - 體育(四) - 1學分',
+                    '通識必修 - 社團活動(四) - 0學分',
+                    '通識必修 - 勞作教育(四) - 0學分',
+                    '通識必修 - 美感體驗 - 2學分',
+                    '專業必修 - 基本電學(二) - 3學分',
+                    '專業必修 - 基本電學實習(二) - 1學分',
+                    '專業必修 - 基礎物件導向程式設計 - 2學分',
+                    '專業必修 - 物件導向程式設計實習 - 2學分',
+                    '專業必修 - 資料庫系統概論 - 3學分',
+                    '專業選修 - 應用實務專題(一) - 4學分',
+                    '專業選修 - 基礎數學演練(四) - 1學分'
+                ];
+                showCourses(courses);
+            });
+
+            document.getElementById('third-year-first-semester').addEventListener("click", function() {
+                const courses = [
+                    '通識必修 - 實用中文 - 2學分',
+                    '通識必修 - 專三英文(一) - 2學分',
+                    '通識必修 - 健康與照護(一) - 1學分',
+                    '通識必修 - 基礎微積分 - 3學分',
+                    '通識必修 - 體育(五) - 1學分',
+                    '通識必修 - 社團活動(五) - 0學分',
+                    '通識必修 - 勞作教育(五) - 0學分',
+                    '專業必修 - 嵌入式系統設計 - 2學分',
+                    '專業必修 - 嵌入式系統實習 - 2學分',
+                    '專業必修 - 視窗程式設計 - 2學分',
+                    '專業必修 - 視窗程式設計實習 - 2學分',
+                    '專業選修 - 動態程式語言 - 3學分',
+                    '專業選修 - 應用實務專題(二) - 4學分'
+                ];
+                showCourses(courses);
+            });
+
+            document.getElementById('third-year-second-semester').addEventListener("click", function() {
+                const courses = [
+                    '通識必修 - 本土語文/台灣手語 - 2學分',
+                    '通識必修 - 專三英文(二) - 2學分',
+                    '通識必修 - 健康與照護(二) - 1學分',
+                    '通識必修 - 基礎工程數學 - 3學分',
+                    '通識必修 - 體育(六) - 1學分',
+                    '通識必修 - 社團活動(六) - 0學分',
+                    '通識必修 - 勞作教育(六) - 0學分',
+                    '專業必修 - 資料結構概論 - 3學分',
+                    '專業必修 - 網路程式設計 - 3學分',
+                    '專業必修 - JavaScript程式設計 - 2學分',
+                    '專業必修 - JavaScript程式設計實習 - 2學分',
+                    '專業選修 - 電腦軟體設計檢定 - 2學分',
+                    '專業選修 - 應用實務專題(三) - 4學分'
+                ];
+                showCourses(courses);
+            });
+
+            document.getElementById('fourth-year-first-semester').addEventListener("click", function() {
+                const courses = [
+                    '通識必修 - 中文閱讀與表達(一) - 2學分',
+                    '通識必修 - 英語聽講實務(一) - 2學分',
+                    '通識必修 - 體育(七) - 2學分',
+                    '通識必修 - 人文社會通識(0-8 學分)',
+                    '通識必修 - 第二外國語文(0-6 學分)',
+                    '通識必修 - 體育－挑戰自我(0-6 學分)',
+                    '通識必修 - 在地關懷－自主學習(0-6 學分)',
+                    '專業必修 - 專題實務(一) - 2學分',
+                    '專業必修 - 計算機數學 - 3學分',
+                    '專業選修(行動通訊應用) - Android程式設計 - 3學分',
+                    '專業選修(行動通訊應用) - 伺服器網頁語言 - 3學分',
+                    '專業選修(行動通訊應用) - 雲端運算與應用 - 3學分',
+                    '專業選修(行動通訊應用) - 資訊安全 - 3學分',
+                    '專業選修(行動通訊應用) - 人工智慧概論 - 3學分',
+                    '專業選修(行動通訊應用) - 使用者經驗設計實務 - 3學分'
+                ];
+                showCourses(courses);
+            });
+
+            document.getElementById('fourth-year-second-semester').addEventListener("click", function() {
+                const courses = [
+                    '通識必修 - 中文閱讀與表達(二) - 2學分',
+                    '通識必修 - 英語聽講實務(二) - 2學分',
+                    '通識必修 - 體育(八) - 2學分',
+                    '通識必修 - 人文社會通識(0-8學分)',
+                    '通識必修 - 第二外國語文(0-6 學分)',
+                    '通識必修 - 體育－挑戰自我(0-6 學分)',
+                    '通識必修 - 在地關懷－自主學習(0-6 學分)',
+                    '通識必修 - 小計 - 6學分',
+                    '專業必修 - 專題實務(二) - 2學分',
+                    '專業必修 - 計算機組織 - 3學分',
+                    '專業必修 - 小計 - 5學分',
+                    '專業選修(行動通訊應用) - 物聯網概論與應用 - 3學分',
+                    '專業選修(行動通訊應用) - 密碼學概論 - 3學分',
+                    '專業選修(行動通訊應用) - 電腦遊戲設計 - 3學分',
+                    '專業選修(行動通訊應用) - 數位影像處理概論 - 3學分',
+                    '專業選修(行動通訊應用) - 電子商務技術 - 3學分',
+                    '專業選修(行動通訊應用) - Python程式設計 - 3學分'
+                ];
+                showCourses(courses);
+            });
+
+            document.getElementById('fifth-year-first-semester').addEventListener("click", function() {
+                const courses = [
+                    '通識必修 - 人文社會通識(0-8學分)',
+                    '通識必修 - 第二外國語文(0-6 學分)',
+                    '通識必修 - 體育－挑戰自我(0-6 學分)',
+                    '通識必修 - 在地關懷－自主學習(0-6 學分)',
+                    '專業選修(行動通訊應用) - iOS程式設計 - 3學分',
+                    '專業選修(行動通訊應用) - 行動通訊網路概論與實務 - 3學分',
+                    '專業選修(行動通訊應用) - 行動裝置遊戲程式設計 - 3學分',
+                    '專業選修(行動通訊應用) - 智慧製造實務 - 3學分',
+                    '專業選修 - 產業實務暑期校外實習 - 3學分',
+                    '專業選修 - 產業實務校外實習（一） - 10學分'
+                ];
+                showCourses(courses);
+            });
+
+            document.getElementById('fifth-year-second-semester').addEventListener("click", function() {
+                const courses = [
+                    '通識必修 - 人文社會通識(0-8 學分)',
+                    '通識必修 - 第二外國語文(0-6 學分)',
+                    '通識必修 - 體育－挑戰自我(0-6 學分)',
+                    '通識必修 - 在地關懷－自主學習(0-6 學分)',
+                    '通識必修 - 小計 - 0學分',
+                    '專業必修 - 專業證照 - 0學分',
+                    '專業必修 - 小計 - 0學分',
+                    '專業選修(行動通訊應用) - 雲端資料庫實務 - 3學分',
+                    '專業選修(行動通訊應用) - 伺服器架設與管理 - 3學分',
+                    '專業選修(行動通訊應用) - 雲端人工智慧運算實務 - 3學分',
+                    '專業選修(行動通訊應用) - 大數據分析 - 3學分',
+                    '專業選修 - 產業實務校外實習（二） - 10學分'
+                ];
+                showCourses(courses);
+            });
+        });
+    </script>
+</body>
 </html>

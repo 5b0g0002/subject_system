@@ -1,92 +1,73 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>南台科技大學選課系統</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/index.css') }}"
-    />
-  </head>
-  <body>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+</head>
+<body>
     <header class="header">
-      <h1>南台科技大學選課系統</h1>
-      <p>系統公告</p>
+        <h1>南台科技大學選課系統</h1>
+        <p>系統公告</p>
+        <p id="greeting"></p>
     </header>
-
     <div class="container">
-      <div class="section">
-        <h2>選課系統簡介</h2>
-        <p>
-          歡迎使用南台科技大學的選課系統。我們提供了方便的平台，讓學生輕鬆選擇和管理課程。我們的系統設計簡潔易用，具有以下特色功能：
-        </p>
-        <ul>
-          <li>多樣化課程選擇</li>
-          <li>智能推薦最適合的課程</li>
-          <li>方便的排課功能</li>
-        </ul>
-      </div>
-
-      <div class="section">
-        <h2>系統公告</h2>
-        <table>
-          <thead>
-            <tr>
-              <th style="white-space: nowrap">發布單位</th>
-              <th class="nowrap">公告內容</th>
-              <th class="nowrap">發布日期</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="spacer">課程與教學組</td>
-              <td class="spacer">
-                <a href="https://news.stust.edu.tw/id/83133"
-                  >112學年度第2學期日間部選課系統課程停修申請公告</a
-                >
-              </td>
-              <td class="spacer">2024/04/24</td>
-            </tr>
-            <tr>
-              <td class="spacer">課程與教學組</td>
-              <td class="spacer">
-                <a href="https://news.stust.edu.tw/id/81686"
-                  >112學年度第2學期網路選課審查結果公告</a
-                >
-              </td>
-              <td class="spacer">2023/12/26</td>
-            </tr>
-            <tr>
-              <td class="spacer">課程與教學組</td>
-              <td class="spacer">
-                <a href="https://news.stust.edu.tw/id/81653"
-                  >112學年度第2學期第一階段網路選課抽籤結果公告</a
-                >
-              </td>
-              <td class="spacer">2023/12/21</td>
-            </tr>
-            <tr>
-              <td class="spacer">課程與教學組</td>
-              <td class="spacer">
-                以下班級查詢說明<br />
-                日服務學習重修、大學英語加強班、教育學程、軍訓：學制請選擇「共同科」，系所請選擇「共同科」
-                高年級體育選修：學制請選擇「共同科」，系所請選擇「體育教育中心」
-                碩研英語加強班：學制請選擇「碩士班」，系所請選擇「共同科」
-              </td>
-              <td class="spacer">2023/12/15</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <div class="section">
+            <h2>選課系統簡介</h2>
+            <p>歡迎使用南台科技大學的選課系統。我們提供了方便的平台，讓學生輕鬆選擇和管理課程。我們的系統設計簡潔易用，具有以下特色功能：</p>
+            <ul>
+                <li>多樣化課程選擇</li>
+                <li>智能推薦最適合的課程</li>
+                <li>方便的排課功能</li>
+            </ul>
+        </div>
+        <div class="section">
+            <h2>系統公告</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap">發布單位</th>
+                        <th class="nowrap">公告內容</th>
+                        <th class="nowrap">發布日期</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="spacer">課程與教學組</td>
+                        <td class="spacer"><a href="https://news.stust.edu.tw/id/83133">112學年度第2學期日間部選課系統課程停修申請公告</a></td>
+                        <td class="spacer">2024/04/24</td>
+                    </tr>
+                    <tr>
+                        <td class="spacer">課程與教學組</td>
+                        <td class="spacer"><a href="https://news.stust.edu.tw/id/81686">112學年度第2學期網路選課審查結果公告</a></td>
+                        <td class="spacer">2023/12/26</td>
+                    </tr>
+                    <tr>
+                        <td class="spacer">課程與教學組</td>
+                        <td class="spacer"><a href="https://news.stust.edu.tw/id/81653">112學年度第2學期第一階段網路選課抽籤結果公告</a></td>
+                        <td class="spacer">2023/12/21</td>
+                    </tr>
+                    <tr>
+                        <td class="spacer">課程與教學組</td>
+                        <td class="spacer">以下班級查詢說明<br />日服務學習重修、大學英語加強班、教育學程、軍訓：學制請選擇「共同科」，系所請選擇「共同科」高年級體育選修：學制請選擇「共同科」，系所請選擇「體育教育中心」碩研英語加強班：學制請選擇「碩士班」，系所請選擇「共同科」</td>
+                        <td class="spacer">2023/12/15</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-
     <footer class="footer">
-      <a href="{{ url_for('selection') }}" class="jump-button">選課系統</a>
+        <a href="{{ url_for('selection') }}" class="jump-button">選課系統</a>
     </footer>
-  </body>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const username = localStorage.getItem('username');
+            if (username) {
+                document.getElementById('greeting').innerText = `同學: ${username}您好`;
+            }
+        });
+    </script>
+</body>
 </html>
